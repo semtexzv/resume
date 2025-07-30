@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michal Hornicky</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --gray-900: #111111;
+            --gray-700: #444444;
+            --gray-500: #666666;
+            --gray-300: #cccccc;
+            --gray-100: #f5f5f5;
+            --white: #ffffff;
+            --accent: #ff0000;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: var(--white);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 48px;
+            margin-bottom: 24px;
+            color: var(--gray-700);
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        p {
+            color: var(--gray-700);
+            margin-bottom: 16px;
+        }
+
+        a {
+            color: var(--black);
+            text-decoration: none;
+            border-bottom: 1px solid var(--gray-300);
+            transition: border-color 0.2s ease;
+        }
+
+        a:hover {
+            border-color: var(--black);
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 48px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--gray-700);
+            margin-bottom: 24px;
+        }
+
+        .contact {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .contact a {
+            color: var(--gray-700);
+        }
+
+        /* Main Content */
+        .intro {
+            font-size: 17px;
+            line-height: 1.7;
+            margin-bottom: 48px;
+            color: var(--gray-900);
+        }
+
+        /* Experience */
+        .experience-item {
+            margin-bottom: 32px;
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 24px;
+        }
+
+        .period {
+            font-size: 13px;
+            color: var(--gray-500);
+            padding-top: 2px;
+        }
+
+        .experience-content h3 {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .company {
+            color: var(--black);
+        }
+
+        .role {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--gray-700);
+        }
+
+        .experience-content ul {
+            margin-top: 8px;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .experience-content li {
+            position: relative;
+            padding-left: 16px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .experience-content li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--gray-300);
+        }
+
+        /* Projects */
+        .projects-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .project {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .project:last-child {
+            border-bottom: none;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+        }
+
+        .project p {
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .tech-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tech {
+            font-size: 12px;
+            background: var(--gray-100);
+            padding: 3px 10px;
+            border-radius: 3px;
+            color: var(--gray-700);
+        }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        .skill-category {
+            font-size: 14px;
+        }
+
+        .skill-category h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--gray-700);
+        }
+
+        .skill-list {
+            color: var(--gray-700);
+            line-height: 1.8;
+        }
+
+        /* Education */
+        .education {
+            display: grid;
+            gap: 16px;
+        }
+
+        .education-item {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 24px;
+            font-size: 14px;
+        }
+
+        .education-dates {
+            color: var(--gray-500);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 80px;
+            padding-top: 32px;
+            border-top: 1px solid var(--gray-100);
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                padding: 0;
+                font-size: 11pt;
+            }
+
+            h2 {
+                page-break-after: avoid;
+            }
+
+            .experience-item,
+            .project {
+                page-break-inside: avoid;
+            }
+
+            a {
+                border-bottom: none;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            body {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .experience-item,
+            .education-item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Michal Hornicky</h1>
+        <p class="subtitle">Software Engineer · AI Systems · Distributed Architecture</p>
+        <div class="contact">
+            <span>Zurich, Switzerland</span>
+            <span><a href="mailto:semtexzv@gmail.com">semtexzv@gmail.com</a></span>
+            <span><a href="https://github.com/semtexzv">github.com/semtexzv</a></span>
+            <span>+41 79 810 28 94</span>
+        </div>
+    </header>
+
+    <main>
+        <p class="intro">
+            I'm a software engineer who enjoys solving complex technical problems. Currently at Google DeepMind working on 
+            autonomous AI agents. I have a strong background in distributed systems, performance optimization, and a deep 
+            appreciation for understanding problems in their full context before building solutions.
+        </p>
+
+        <h2>Experience</h2>
+        
+        <div class="experience-item">
+            <div class="period">2024 — Present</div>
+            <div class="experience-content">
+                <h3>
+                    <span class="company">Google DeepMind</span>
+                    <span class="role">Software Engineer</span>
+                </h3>
+                <ul>
+                    <li>Building autonomous AI agents for code generation</li>
+                    <li>Leading Gemini application testing infrastructure</li>
+                    <li>Researching and implementing AI agent architectures</li>
+                    <li>Sharing knowledge through technical workshops</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="experience-item">
+            <div class="period">2021 — 2024</div>
+            <div class="experience-content">
+                <h3>
+                    <span class="company">Google</span>
+                    <span class="role">Software Engineer</span>
+                </h3>
+                <ul>
+                    <li>Developed testing infrastructure for Assistant, Search, and Gemini apps</li>
+                    <li>Integrated LLMs into automated testing workflows</li>
+                    <li>Improved release velocity while maintaining quality standards</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="experience-item">
+            <div class="period">2020 — 2021</div>
+            <div class="experience-content">
+                <h3>
+                    <span class="company">RedHat</span>
+                    <span class="role">Senior Software Engineer</span>
+                </h3>
+                <ul>
+                    <li>Led Patch application serving thousands of enterprise deployments</li>
+                    <li>Architected distributed systems for cloud.redhat.com</li>
+                    <li>Mentored engineers and shared knowledge across teams</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="experience-item">
+            <div class="period">2019 — 2020</div>
+            <div class="experience-content">
+                <h3>
+                    <span class="company">RedHat</span>
+                    <span class="role">Software Engineer</span>
+                </h3>
+                <ul>
+                    <li>Optimized Vulnerability application performance</li>
+                    <li>Created Go/Python integration libraries</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="experience-item">
+            <div class="period">2016 — 2019</div>
+            <div class="experience-content">
+                <h3>
+                    <span class="company">TouchArt</span>
+                    <span class="role">Android Developer</span>
+                </h3>
+                <ul>
+                    <li>Built 10+ production Android applications</li>
+                    <li>Led Kotlin migration and MVVM architecture adoption</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>Projects</h2>
+        
+        <div class="projects-grid">
+            <div class="project">
+                <div class="project-header">
+                    <h3>Termineer</h3>
+                    <div class="project-links">
+                        <a href="https://termineer.io/">termineer.io</a>
+                        <a href="https://github.com/semtexzv/termineer">github</a>
+                    </div>
+                </div>
+                <p>Autonomous AI coding agent with multi-agent orchestration. Production-ready system supporting multiple AI providers.</p>
+                <div class="tech-list">
+                    <span class="tech">Rust</span>
+                    <span class="tech">Multi-Agent</span>
+                    <span class="tech">MCP</span>
+                </div>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <h3>GenAgent</h3>
+                    <div class="project-links">
+                        <a href="https://github.com/semtexzv/genagent">github</a>
+                    </div>
+                </div>
+                <p>macOS/iOS AI assistant with multi-provider support and voice capabilities. Research project exploring AI interactions.</p>
+                <div class="tech-list">
+                    <span class="tech">Rust</span>
+                    <span class="tech">Swift</span>
+                    <span class="tech">FFI</span>
+                </div>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <h3>Infrastructure Projects</h3>
+                    <div class="project-links">
+                        <a href="https://github.com/semtexzv">github</a>
+                    </div>
+                </div>
+                <p>Built performance-critical systems: Protokit (Protocol Buffers), Stor (embedded database), Prospector (crypto miner with world record performance).</p>
+                <div class="tech-list">
+                    <span class="tech">Rust</span>
+                    <span class="tech">CUDA</span>
+                    <span class="tech">Performance</span>
+                </div>
+            </div>
+        </div>
+
+        <h2>Technical Skills</h2>
+        
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h4>Languages</h4>
+                <div class="skill-list">
+                    Rust, Go (expert)<br>
+                    Python, Kotlin, Java<br>
+                    C++, JavaScript
+                </div>
+            </div>
+            <div class="skill-category">
+                <h4>Systems</h4>
+                <div class="skill-list">
+                    Distributed Systems<br>
+                    AI/ML Infrastructure<br>
+                    Cloud (Kubernetes, GCP)<br>
+                    Performance Engineering
+                </div>
+            </div>
+        </div>
+
+        <h2>Education</h2>
+        
+        <div class="education">
+            <div class="education-item">
+                <div class="education-dates">2017 — 2019</div>
+                <div>Master's Degree, Information Technology · Brno University of Technology</div>
+            </div>
+            <div class="education-item">
+                <div class="education-dates">2014 — 2017</div>
+                <div>Bachelor's Degree, Information Technology · Brno University of Technology</div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>References and detailed project information available upon request.</p>
+    </footer>
+</body>
+</html>

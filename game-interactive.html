@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michal Hornicky - Interactive Resume</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000814;
+            --primary: #001d3d;
+            --secondary: #003566;
+            --accent: #ffd60a;
+            --text: #ffffff;
+            --text-dim: #c1c1c1;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Star Background */
+        #stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header with Game */
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--accent), #ffb700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            margin-bottom: 30px;
+        }
+
+        /* Game Canvas */
+        .game-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin: 0 auto 40px;
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, #001d3d 0%, #000814 100%);
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: none;
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 8, 20, 0.9);
+            z-index: 10;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .game-instructions {
+            font-size: 1rem;
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .game-btn {
+            padding: 15px 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        .game-stats {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--accent);
+            z-index: 5;
+        }
+
+        .game-over {
+            display: none;
+        }
+
+        /* Experience Timeline */
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--secondary);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timeline-content {
+            background: var(--primary);
+            padding: 25px;
+            border-radius: 10px;
+            width: calc(50% - 40px);
+            border: 1px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(255, 214, 10, 0.3);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 30px;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .company {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .role {
+            color: var(--text-dim);
+            margin-bottom: 10px;
+        }
+
+        .date {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .project-card {
+            background: var(--primary);
+            border: 1px solid var(--secondary);
+            border-radius: 10px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(255, 214, 10, 0.2);
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .project-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .project-desc {
+            color: var(--text-dim);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tech-tag {
+            background: var(--secondary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        /* Skills */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .skill-item {
+            background: var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--secondary);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .skill-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #ffb700);
+            transition: width 2s ease;
+        }
+
+        /* Contact */
+        .contact-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--primary);
+            border-radius: 20px;
+            border: 2px solid var(--secondary);
+            margin-top: 60px;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+            text-decoration: none;
+            padding: 12px 24px;
+            background: var(--secondary);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            background: var(--accent);
+            color: var(--bg);
+            transform: translateY(-3px);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .timeline::before { left: 30px; }
+            .timeline-content { width: calc(100% - 60px); margin-left: 60px !important; }
+            .timeline-dot { left: 30px; }
+            .game-container { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="stars"></canvas>
+
+    <div class="container">
+        <header>
+            <h1>MICHAL HORNICKY</h1>
+            <p class="subtitle">AI Engineer • Distributed Systems Architect • Code Explorer</p>
+            
+            <!-- Space Game -->
+            <div class="game-container">
+                <canvas id="gameCanvas"></canvas>
+                <div class="game-stats">
+                    Score: <span id="score">0</span> | Level: <span id="level">1</span>
+                </div>
+                <div class="game-overlay" id="gameStart">
+                    <div class="game-title">RESUME EXPLORER</div>
+                    <div class="game-instructions">
+                        Navigate through my career journey!<br>
+                        Collect achievements and dodge obstacles.<br>
+                        Use mouse or arrow keys to control your ship.
+                    </div>
+                    <button class="game-btn" onclick="startGame()">START MISSION</button>
+                </div>
+                <div class="game-overlay game-over" id="gameOver">
+                    <div class="game-title">MISSION COMPLETE!</div>
+                    <div class="game-instructions">
+                        Score: <span id="finalScore">0</span><br>
+                        You've explored my career journey!
+                    </div>
+                    <button class="game-btn" onclick="restartGame()">PLAY AGAIN</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Experience Section -->
+        <section class="section">
+            <h2 class="section-title">MISSION LOG</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="company">Google DeepMind</div>
+                        <div class="role">Software Engineer</div>
+                        <div class="date">2024 - Present</div>
+                        <p>Building autonomous AI agents. Leading Gemini testing infrastructure. Exploring the frontiers of AI.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="company">Google</div>
+                        <div class="role">Software Engineer</div>
+                        <div class="date">2021 - 2024</div>
+                        <p>Developed testing infrastructure for Assistant, Search, and Gemini. Pioneered LLM integration.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="company">RedHat</div>
+                        <div class="role">Senior Software Engineer</div>
+                        <div class="date">2019 - 2021</div>
+                        <p>Led Patch application serving 1000+ deployments. Architected distributed systems at scale.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="company">Android Development</div>
+                        <div class="role">Mobile Engineer</div>
+                        <div class="date">2016 - 2019</div>
+                        <p>Built 10+ production apps. Led Kotlin migration and architecture improvements.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="section">
+            <h2 class="section-title">TECH ARSENAL</h2>
+            <div class="projects-grid">
+                <div class="project-card" onclick="window.open('https://termineer.io/', '_blank')">
+                    <i class="fas fa-robot project-icon"></i>
+                    <h3 class="project-title">Termineer</h3>
+                    <p class="project-desc">Autonomous AI coding agent with multi-agent orchestration</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Rust</span>
+                        <span class="tech-tag">AI Agents</span>
+                        <span class="tech-tag">Public</span>
+                    </div>
+                </div>
+                <div class="project-card" onclick="window.open('https://github.com/semtexzv/genagent', '_blank')">
+                    <i class="fas fa-brain project-icon"></i>
+                    <h3 class="project-title">GenAgent</h3>
+                    <p class="project-desc">Cross-platform AI assistant with voice capabilities</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Rust</span>
+                        <span class="tech-tag">Swift</span>
+                        <span class="tech-tag">Research</span>
+                    </div>
+                </div>
+                <div class="project-card" onclick="window.open('https://github.com/semtexzv', '_blank')">
+                    <i class="fas fa-server project-icon"></i>
+                    <h3 class="project-title">Infrastructure Suite</h3>
+                    <p class="project-desc">High-performance systems: Protokit, Stor, Prospector</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Performance</span>
+                        <span class="tech-tag">Systems</span>
+                        <span class="tech-tag">CUDA</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="section">
+            <h2 class="section-title">POWER LEVELS</h2>
+            <div class="skills-container">
+                <div class="skill-item">
+                    <i class="fas fa-rocket skill-icon"></i>
+                    <div class="skill-name">Rust</div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 95%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-cube skill-icon"></i>
+                    <div class="skill-name">Go</div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 95%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-network-wired skill-icon"></i>
+                    <div class="skill-name">Distributed Systems</div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-robot skill-icon"></i>
+                    <div class="skill-name">AI/ML</div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section">
+            <h2 class="section-title">ESTABLISH CONTACT</h2>
+            <p>Ready to build something amazing together?</p>
+            <div class="contact-links">
+                <a href="mailto:semtexzv@gmail.com" class="contact-link">
+                    <i class="fas fa-envelope"></i> Email
+                </a>
+                <a href="https://github.com/semtexzv" target="_blank" class="contact-link">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="tel:+41798102894" class="contact-link">
+                    <i class="fas fa-phone"></i> Call
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Star background
+        const starsCanvas = document.getElementById('stars');
+        const starsCtx = starsCanvas.getContext('2d');
+        
+        function resizeStars() {
+            starsCanvas.width = window.innerWidth;
+            starsCanvas.height = window.innerHeight;
+        }
+        resizeStars();
+        window.addEventListener('resize', resizeStars);
+
+        const stars = [];
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * starsCanvas.width,
+                y: Math.random() * starsCanvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 0.5 + 0.1
+            });
+        }
+
+        function drawStars() {
+            starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+            starsCtx.fillStyle = '#ffffff';
+            
+            stars.forEach(star => {
+                starsCtx.beginPath();
+                starsCtx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                starsCtx.fill();
+                
+                star.y += star.speed;
+                if (star.y > starsCanvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * starsCanvas.width;
+                }
+            });
+            
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+
+        // Game
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const gameStart = document.getElementById('gameStart');
+        const gameOver = document.getElementById('gameOver');
+        
+        let gameRunning = false;
+        let score = 0;
+        let level = 1;
+        
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Game objects
+        const ship = {
+            x: 50,
+            y: canvas.height / 2,
+            width: 40,
+            height: 30,
+            speed: 5
+        };
+
+        const achievements = [];
+        const obstacles = [];
+        const particles = [];
+
+        // Achievement types
+        const achievementTypes = [
+            { text: 'AI', color: '#ffd60a', points: 10 },
+            { text: 'Rust', color: '#ff6b6b', points: 15 },
+            { text: 'Go', color: '#4ecdc4', points: 15 },
+            { text: 'K8s', color: '#45b7d1', points: 20 },
+            { text: 'ML', color: '#96ceb4', points: 25 }
+        ];
+
+        // Create achievement
+        function createAchievement() {
+            const type = achievementTypes[Math.floor(Math.random() * achievementTypes.length)];
+            achievements.push({
+                x: canvas.width,
+                y: Math.random() * (canvas.height - 40) + 20,
+                width: 60,
+                height: 30,
+                ...type
+            });
+        }
+
+        // Create obstacle
+        function createObstacle() {
+            obstacles.push({
+                x: canvas.width,
+                y: Math.random() * (canvas.height - 40) + 20,
+                width: 30,
+                height: 30,
+                speed: 3 + level
+            });
+        }
+
+        // Create particle effect
+        function createParticles(x, y, color) {
+            for (let i = 0; i < 10; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    life: 1,
+                    color: color
+                });
+            }
+        }
+
+        // Input handling
+        const keys = {};
+        let mouseY = canvas.height / 2;
+
+        document.addEventListener('keydown', e => keys[e.key] = true);
+        document.addEventListener('keyup', e => keys[e.key] = false);
+        canvas.addEventListener('mousemove', e => {
+            const rect = canvas.getBoundingClientRect();
+            mouseY = e.clientY - rect.top;
+        });
+
+        // Update game
+        function update() {
+            if (!gameRunning) return;
+
+            // Move ship
+            if (keys['ArrowUp']) ship.y -= ship.speed;
+            if (keys['ArrowDown']) ship.y += ship.speed;
+            
+            // Follow mouse
+            const dy = mouseY - ship.y;
+            ship.y += dy * 0.1;
+
+            // Keep ship in bounds
+            ship.y = Math.max(20, Math.min(canvas.height - 20, ship.y));
+
+            // Move achievements
+            achievements.forEach((achievement, index) => {
+                achievement.x -= 3;
+                
+                // Check collision with ship
+                if (
+                    ship.x < achievement.x + achievement.width &&
+                    ship.x + ship.width > achievement.x &&
+                    ship.y - 15 < achievement.y + achievement.height &&
+                    ship.y + 15 > achievement.y
+                ) {
+                    score += achievement.points;
+                    createParticles(achievement.x, achievement.y, achievement.color);
+                    achievements.splice(index, 1);
+                    document.getElementById('score').textContent = score;
+                    
+                    // Level up
+                    if (score > level * 100) {
+                        level++;
+                        document.getElementById('level').textContent = level;
+                    }
+                }
+                
+                // Remove if off screen
+                if (achievement.x < -achievement.width) {
+                    achievements.splice(index, 1);
+                }
+            });
+
+            // Move obstacles
+            obstacles.forEach((obstacle, index) => {
+                obstacle.x -= obstacle.speed;
+                
+                // Check collision with ship
+                if (
+                    ship.x < obstacle.x + obstacle.width &&
+                    ship.x + ship.width > obstacle.x &&
+                    ship.y - 15 < obstacle.y + obstacle.height &&
+                    ship.y + 15 > obstacle.y
+                ) {
+                    endGame();
+                }
+                
+                // Remove if off screen
+                if (obstacle.x < -obstacle.width) {
+                    obstacles.splice(index, 1);
+                }
+            });
+
+            // Update particles
+            particles.forEach((particle, index) => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.life -= 0.02;
+                
+                if (particle.life <= 0) {
+                    particles.splice(index, 1);
+                }
+            });
+
+            // Spawn new objects
+            if (Math.random() < 0.02 + level * 0.005) createAchievement();
+            if (Math.random() < 0.01 + level * 0.003) createObstacle();
+        }
+
+        // Draw game
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (!gameRunning) return;
+
+            // Draw ship
+            ctx.save();
+            ctx.translate(ship.x, ship.y);
+            ctx.fillStyle = '#ffd60a';
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-20, -15);
+            ctx.lineTo(-15, 0);
+            ctx.lineTo(-20, 15);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Ship engine
+            ctx.fillStyle = '#ff6b6b';
+            ctx.fillRect(-25, -5, 10, 10);
+            ctx.restore();
+
+            // Draw achievements
+            achievements.forEach(achievement => {
+                ctx.fillStyle = achievement.color;
+                ctx.fillRect(achievement.x, achievement.y, achievement.width, achievement.height);
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 12px Orbitron';
+                ctx.textAlign = 'center';
+                ctx.fillText(achievement.text, achievement.x + achievement.width/2, achievement.y + achievement.height/2 + 4);
+            });
+
+            // Draw obstacles
+            ctx.fillStyle = '#ff4444';
+            obstacles.forEach(obstacle => {
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            });
+
+            // Draw particles
+            particles.forEach(particle => {
+                ctx.globalAlpha = particle.life;
+                ctx.fillStyle = particle.color;
+                ctx.fillRect(particle.x - 2, particle.y - 2, 4, 4);
+            });
+            ctx.globalAlpha = 1;
+        }
+
+        // Game loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start game
+        function startGame() {
+            gameRunning = true;
+            score = 0;
+            level = 1;
+            achievements.length = 0;
+            obstacles.length = 0;
+            particles.length = 0;
+            ship.y = canvas.height / 2;
+            document.getElementById('score').textContent = score;
+            document.getElementById('level').textContent = level;
+            gameStart.style.display = 'none';
+            gameOver.style.display = 'none';
+        }
+
+        // End game
+        function endGame() {
+            gameRunning = false;
+            document.getElementById('finalScore').textContent = score;
+            gameOver.style.display = 'flex';
+        }
+
+        // Restart game
+        function restartGame() {
+            startGame();
+        }
+
+        // Start game loop
+        gameLoop();
+
+        // Animate skill bars on scroll
+        const skillBars = document.querySelectorAll('.skill-fill');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.width = entry.target.style.width;
+                }
+            });
+        });
+        skillBars.forEach(bar => observer.observe(bar));
+    </script>
+</body>
+</html>

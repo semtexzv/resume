@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mhornicky@resume:~$</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #0a0e27;
+            --terminal-bg: #0d1117;
+            --text-color: #58a6ff;
+            --green: #3fb950;
+            --yellow: #d29922;
+            --red: #f85149;
+            --purple: #bc8cff;
+            --cyan: #39c5cf;
+            --orange: #f0883e;
+            --comment: #8b949e;
+            --border: #30363d;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: text;
+        }
+
+        /* Matrix rain effect */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            font-size: 14px;
+            line-height: 14px;
+            color: var(--green);
+            animation: matrix-fall linear infinite;
+        }
+
+        @keyframes matrix-fall {
+            to {
+                top: 100%;
+            }
+        }
+
+        /* Terminal Container */
+        .terminal-window {
+            max-width: 1400px;
+            margin: 20px auto;
+            background: var(--terminal-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+        }
+
+        /* Terminal Header */
+        .terminal-header {
+            background: #161b22;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--red);
+        }
+
+        .terminal-button.yellow {
+            background: var(--yellow);
+        }
+
+        .terminal-button.green {
+            background: var(--green);
+        }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            color: var(--comment);
+            font-size: 13px;
+        }
+
+        /* Terminal Content */
+        .terminal-content {
+            padding: 20px;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Custom Scrollbar */
+        .terminal-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .terminal-content::-webkit-scrollbar-track {
+            background: var(--terminal-bg);
+        }
+
+        .terminal-content::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 5px;
+        }
+
+        .terminal-content::-webkit-scrollbar-thumb:hover {
+            background: var(--comment);
+        }
+
+        /* Command Line */
+        .command-line {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .prompt {
+            color: var(--green);
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .prompt-user {
+            color: var(--purple);
+        }
+
+        .prompt-path {
+            color: var(--cyan);
+        }
+
+        .command {
+            color: var(--text-color);
+            flex: 1;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: var(--text-color);
+            animation: blink 1s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        /* Output Styles */
+        .output {
+            margin-bottom: 20px;
+            animation: typewriter 0.5s ease;
+        }
+
+        @keyframes typewriter {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 100%;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ASCII Art */
+        .ascii-art {
+            color: var(--green);
+            font-size: 10px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            white-space: pre;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 95% {
+                text-shadow: none;
+            }
+            96% {
+                text-shadow: -2px 0 var(--red), 2px 0 var(--cyan);
+            }
+            97% {
+                text-shadow: -1px 0 var(--red), 1px 0 var(--cyan);
+            }
+            98% {
+                text-shadow: none;
+            }
+            99% {
+                text-shadow: 2px 0 var(--red), -2px 0 var(--cyan);
+            }
+        }
+
+        /* Section Headers */
+        .section-header {
+            color: var(--yellow);
+            font-weight: 700;
+            margin: 30px 0 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--border);
+            position: relative;
+        }
+
+        .section-header::before {
+            content: '// ';
+            color: var(--comment);
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            margin: 15px 0;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            color: var(--purple);
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table td {
+            padding: 8px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .data-table tr:hover {
+            background: rgba(88, 166, 255, 0.1);
+        }
+
+        /* Skills Progress Bars */
+        .skill-bar {
+            margin: 10px 0;
+        }
+
+        .skill-name {
+            color: var(--cyan);
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            background: var(--border);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green), var(--cyan));
+            transition: width 2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Project Cards */
+        .project-card {
+            background: rgba(22, 27, 34, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            border-color: var(--cyan);
+            transform: translateX(10px);
+            box-shadow: -5px 5px 20px rgba(57, 197, 207, 0.3);
+        }
+
+        .project-card::before {
+            content: '>';
+            position: absolute;
+            left: -20px;
+            color: var(--green);
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover::before {
+            left: 5px;
+        }
+
+        .project-title {
+            color: var(--yellow);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .project-desc {
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tech-badge {
+            background: var(--border);
+            color: var(--purple);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        /* Contact Links */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(22, 27, 34, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            border-color: var(--green);
+            background: rgba(63, 185, 80, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .contact-icon {
+            color: var(--green);
+            font-size: 20px;
+        }
+
+        /* Fun Easter Eggs */
+        .secret-command {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .secret-command.revealed {
+            opacity: 1;
+            color: var(--orange);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            text-align: left;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { content: '.'; }
+            33% { content: '..'; }
+            66% { content: '...'; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .terminal-content {
+                padding: 15px;
+                font-size: 12px;
+            }
+
+            .ascii-art {
+                font-size: 6px;
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+        }
+
+        /* Glitch text effect */
+        .glitch {
+            position: relative;
+            color: var(--text-color);
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-1 0.5s infinite linear alternate-reverse;
+            color: var(--red);
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 0.5s infinite linear alternate-reverse;
+            color: var(--cyan);
+            z-index: -2;
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(1deg); }
+            40% { transform: skew(-1deg); }
+            60% { transform: skew(0.5deg); }
+            80% { transform: skew(-0.5deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        @keyframes glitch-1 {
+            0% { clip-path: inset(20% 0 30% 0); transform: translate(-2px, 2px); }
+            20% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -2px); }
+            40% { clip-path: inset(50% 0 20% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(30% 0 40% 0); transform: translate(2px, -2px); }
+            80% { clip-path: inset(70% 0 10% 0); transform: translate(-2px, 2px); }
+            100% { clip-path: inset(20% 0 30% 0); transform: translate(2px, -2px); }
+        }
+
+        @keyframes glitch-2 {
+            0% { clip-path: inset(70% 0 10% 0); transform: translate(2px, -2px); }
+            20% { clip-path: inset(30% 0 40% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(50% 0 20% 0); transform: translate(-2px, 2px); }
+            80% { clip-path: inset(20% 0 30% 0); transform: translate(2px, -2px); }
+            100% { clip-path: inset(70% 0 10% 0); transform: translate(-2px, 2px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Background -->
+    <div class="matrix-bg" id="matrix"></div>
+
+    <!-- Terminal Window -->
+    <div class="terminal-window">
+        <div class="terminal-header">
+            <div class="terminal-button"></div>
+            <div class="terminal-button yellow"></div>
+            <div class="terminal-button green"></div>
+            <div class="terminal-title">mhornicky@resume:~$ resumé --interactive</div>
+        </div>
+
+        <div class="terminal-content" id="terminal">
+            <!-- ASCII Art -->
+            <pre class="ascii-art">
+███╗   ███╗██╗ ██████╗██╗  ██╗ █████╗ ██╗     
+████╗ ████║██║██╔════╝██║  ██║██╔══██╗██║     
+██╔████╔██║██║██║     ███████║███████║██║     
+██║╚██╔╝██║██║██║     ██╔══██║██╔══██║██║     
+██║ ╚═╝ ██║██║╚██████╗██║  ██║██║  ██║███████╗
+╚═╝     ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
+            </pre>
+
+            <!-- Initial Commands -->
+            <div class="command-line">
+                <span class="prompt">
+                    <span class="prompt-user">mhornicky</span>@<span class="prompt-path">resume</span>:~$
+                </span>
+                <span class="command">whoami</span>
+            </div>
+            <div class="output">
+                <h1 class="glitch" data-text="Michal Hornicky">Michal Hornicky</h1>
+                <p>AI Engineer | Distributed Systems Architect | Code Craftsman</p>
+                <p style="color: var(--comment)">// Currently breaking and fixing things at Google DeepMind</p>
+            </div>
+
+            <div class="command-line">
+                <span class="prompt">
+                    <span class="prompt-user">mhornicky</span>@<span class="prompt-path">resume</span>:~$
+                </span>
+                <span class="command">cat /etc/about.md</span>
+            </div>
+            <div class="output">
+                <div class="section-header">ABOUT</div>
+                <p>Former crypto miner turned AI whisperer. I build autonomous agents that write better code than most humans (including myself sometimes). When I'm not teaching machines to think, I'm optimizing distributed systems to run at the speed of light.</p>
+                <br>
+                <p><span style="color: var(--green)">Location:</span> Zurich, Switzerland 🇨🇭</p>
+                <p><span style="color: var(--green)">Status:</span> Building the future @ Google DeepMind</p>
+                <p><span style="color: var(--green)">Favorite Language:</span> Rust (zero-cost abstractions FTW!)</p>
+                <p><span style="color: var(--green)">Coffee consumption:</span> <span class="loading"></span> calculating</p>
+            </div>
+
+            <div class="command-line">
+                <span class="prompt">
+                    <span class="prompt-user">mhornicky</span>@<span class="prompt-path">resume</span>:~$
+                </span>
+                <span class="command">skills --list --sort=proficiency</span>
+            </div>
+            <div class="output">
+                <div class="section-header">TECHNICAL SKILLS</div>
+                
+                <div class="skill-bar">
+                    <div class="skill-name">🤖 AI/ML & LLMs [Master]</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 95%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-name">🦀 Rust [Expert]</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 95%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-name">🐹 Go [Expert]</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 95%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-name">🔧 Distributed Systems [Expert]</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 90%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-name">☁️ Cloud & Kubernetes [Advanced]</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-name">🐍 Python [Advanced]</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 80%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-name">📱 Mobile Dev (Android/iOS) [Advanced]</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 80%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-name">⚡ GPGPU (CUDA/OpenCL) [Intermediate]</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="command-line">
+                <span class="prompt">
+                    <span class="prompt-user">mhornicky</span>@<span class="prompt-path">resume</span>:~$
+                </span>
+                <span class="command">git log --oneline --graph --work-experience</span>
+            </div>
+            <div class="output">
+                <div class="section-header">WORK HISTORY</div>
+                <pre style="color: var(--comment); line-height: 1.8;">
+* <span style="color: var(--yellow)">2024-present</span> <span style="color: var(--purple)">[Google DeepMind]</span> <span style="color: var(--green)">Software Engineer</span>
+│ └─ Building autonomous LLM agents for code generation
+│ └─ Leading AI agent integration for Gemini testing
+│ └─ Mentoring teams on AI architectures
+│
+* <span style="color: var(--yellow)">2021-2024</span> <span style="color: var(--purple)">[Google]</span> <span style="color: var(--green)">Software Engineer</span>
+│ └─ Automated testing for Assistant, Search, Gemini/Bard
+│ └─ Led LLM adoption for test automation
+│ └─ Scaled mobile app testing infrastructure
+│
+* <span style="color: var(--yellow)">2020-2021</span> <span style="color: var(--purple)">[RedHat]</span> <span style="color: var(--green)">Senior Software Engineer</span>
+│ └─ Led Patch application development team
+│ └─ Scaled to 1000s of deployments/day
+│ └─ Distributed systems architecture
+│
+* <span style="color: var(--yellow)">2019-2020</span> <span style="color: var(--purple)">[RedHat]</span> <span style="color: var(--green)">Software Engineer</span>
+│ └─ Performance optimization for cloud.redhat.com
+│ └─ Go/Python integration libraries
+│
+* <span style="color: var(--yellow)">2016-2019</span> <span style="color: var(--purple)">[TouchArt]</span> <span style="color: var(--green)">Android Developer</span>
+  └─ Built 10+ production Android apps
+  └─ Kotlin migration champion
+                </pre>
+            </div>
+
+            <div class="command-line">
+                <span class="prompt">
+                    <span class="prompt-user">mhornicky</span>@<span class="prompt-path">resume</span>:~$
+                </span>
+                <span class="command">ls -la ~/projects --favorites</span>
+            </div>
+            <div class="output">
+                <div class="section-header">FEATURED PROJECTS</div>
+                
+                <div class="project-card">
+                    <div class="project-title">🤖 Termineer <span style="color: var(--green)">[PUBLIC]</span></div>
+                    <div class="project-desc">Autonomous AI coding agent that actually ships production code. Multi-agent orchestration with MCP support.</div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Rust</span>
+                        <span class="tech-badge">Multi-Agent</span>
+                        <span class="tech-badge">TUI</span>
+                        <span class="tech-badge">MCP</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-title">🎯 GenAgent <span style="color: var(--orange)">[EXPERIMENTAL]</span></div>
+                    <div class="project-desc">macOS/iOS AI assistant living in your taskbar. Supports all major LLM providers with voice I/O.</div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Rust</span>
+                        <span class="tech-badge">Swift</span>
+                        <span class="tech-badge">FFI</span>
+                        <span class="tech-badge">Multi-Provider</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-title">🧠 Rama <span style="color: var(--orange)">[RESEARCH]</span></div>
+                    <div class="project-desc">LLM implementation from scratch in Rust. Because sometimes you need to understand every single matrix multiplication.</div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Rust</span>
+                        <span class="tech-badge">ML</span>
+                        <span class="tech-badge">Transformers</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-title">⚡ MML <span style="color: var(--orange)">[EXPERIMENTAL]</span></div>
+                    <div class="project-desc">Micro ML library with autodiff for Apple Silicon. Making neural networks go brrr on M-series chips.</div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Rust</span>
+                        <span class="tech-badge">Autodiff</span>
+                        <span class="tech-badge">Apple Silicon</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-title">⛏️ Prospector</div>
+                    <div class="project-desc">World's fastest cryptocurrency miner (back when crypto was cool). Achieved record-breaking performance on Signatum.</div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Rust</span>
+                        <span class="tech-badge">CUDA</span>
+                        <span class="tech-badge">OpenCL</span>
+                        <span class="tech-badge">Performance</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-title">📦 Protokit</div>
+                    <div class="project-desc">High-performance Protocol Buffers for Rust. Only implementation with full TextFormat support.</div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Rust</span>
+                        <span class="tech-badge">Serialization</span>
+                        <span class="tech-badge">Performance</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="command-line">
+                <span class="prompt">
+                    <span class="prompt-user">mhornicky</span>@<span class="prompt-path">resume</span>:~$
+                </span>
+                <span class="command">education --format=brief</span>
+            </div>
+            <div class="output">
+                <div class="section-header">EDUCATION</div>
+                <table class="data-table">
+                    <tr>
+                        <th>Degree</th>
+                        <th>Institution</th>
+                        <th>Year</th>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--cyan)">Master's in IT</td>
+                        <td>Brno University of Technology</td>
+                        <td style="color: var(--yellow)">2017-2019</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--cyan)">Bachelor's in IT</td>
+                        <td>Brno University of Technology</td>
+                        <td style="color: var(--yellow)">2014-2017</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="command-line">
+                <span class="prompt">
+                    <span class="prompt-user">mhornicky</span>@<span class="prompt-path">resume</span>:~$
+                </span>
+                <span class="command">contact --list-all</span>
+            </div>
+            <div class="output">
+                <div class="section-header">CONTACT</div>
+                <div class="contact-grid">
+                    <a href="mailto:semtexzv@gmail.com" class="contact-item">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <span>semtexzv@gmail.com</span>
+                    </a>
+                    <a href="https://github.com/semtexzv" target="_blank" class="contact-item">
+                        <i class="fab fa-github contact-icon"></i>
+                        <span>github.com/semtexzv</span>
+                    </a>
+                    <a href="tel:+41798102894" class="contact-item">
+                        <i class="fas fa-phone contact-icon"></i>
+                        <span>+41 79 810 28 94</span>
+                    </a>
+                    <a href="#" class="contact-item">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        <span>Zurich, Switzerland</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="command-line">
+                <span class="prompt">
+                    <span class="prompt-user">mhornicky</span>@<span class="prompt-path">resume</span>:~$
+                </span>
+                <span class="command secret-command">sudo hire michal</span>
+            </div>
+            <div class="output secret-command">
+                <p style="color: var(--green);">[SUCCESS] Great choice! Initiating hiring protocol...</p>
+                <p style="color: var(--yellow);">Warning: Side effects may include significantly improved code quality, 
+                autonomous systems that actually work, and occasional Rust evangelism.</p>
+            </div>
+
+            <div class="command-line">
+                <span class="prompt">
+                    <span class="prompt-user">mhornicky</span>@<span class="prompt-path">resume</span>:~$
+                </span>
+                <span class="command"><span class="cursor"></span></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix rain effect
+        function createMatrixRain() {
+            const matrix = document.getElementById('matrix');
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            const columns = Math.floor(window.innerWidth / 20);
+            
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = i * 20 + 'px';
+                column.style.animationDuration = Math.random() * 5 + 5 + 's';
+                column.style.animationDelay = Math.random() * 5 + 's';
+                
+                let text = '';
+                for (let j = 0; j < 100; j++) {
+                    text += chars[Math.floor(Math.random() * chars.length)] + '<br>';
+                }
+                column.innerHTML = text;
+                matrix.appendChild(column);
+            }
+        }
+
+        createMatrixRain();
+
+        // Typing animation for commands
+        const commands = document.querySelectorAll('.command');
+        const outputs = document.querySelectorAll('.output');
+        
+        let delay = 0;
+        commands.forEach((cmd, index) => {
+            setTimeout(() => {
+                cmd.style.opacity = '1';
+                if (outputs[index]) {
+                    setTimeout(() => {
+                        outputs[index].style.opacity = '1';
+                    }, 500);
+                }
+            }, delay);
+            delay += 1000;
+        });
+
+        // Progressive skill bar animation
+        setTimeout(() => {
+            document.querySelectorAll('.progress-fill').forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.width = bar.style.width;
+                }, index * 200);
+            });
+        }, 3000);
+
+        // Easter egg - Konami code
+        let konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    document.querySelectorAll('.secret-command').forEach(el => {
+                        el.classList.add('revealed');
+                    });
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+
+        // Smooth scrolling
+        document.getElementById('terminal').scrollTop = 0;
+        
+        // Auto-scroll effect (optional)
+        // let scrollPos = 0;
+        // setInterval(() => {
+        //     scrollPos += 1;
+        //     document.getElementById('terminal').scrollTop = scrollPos;
+        // }, 50);
+
+        // Terminal cursor blinking
+        setInterval(() => {
+            const cursor = document.querySelector('.cursor');
+            if (cursor) {
+                cursor.style.opacity = cursor.style.opacity === '0' ? '1' : '0';
+            }
+        }, 500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michal Hornicky - Engineer & Architect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0b0e;
+            --bg-light: #12141a;
+            --text: #e8e8e8;
+            --text-dim: #8b8d98;
+            --accent: #5865f2;
+            --accent-alt: #57f287;
+            --border: #2a2d38;
+            --card: #181a20;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Layout */
+        .layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-light);
+            border-right: 1px solid var(--border);
+            padding: 40px 30px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .profile {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border: 3px solid var(--accent);
+            position: relative;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .profile .title {
+            color: var(--accent);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .contact-item:hover {
+            color: var(--text);
+        }
+
+        .contact-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Skills Radar */
+        .skills-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+        }
+
+        .skill-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .skill {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .skill-name {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .skill-level {
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        .skill-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 2s ease;
+        }
+
+        /* Languages */
+        .languages {
+            display: flex;
+            gap: 16px;
+            justify-content: space-around;
+        }
+
+        .language {
+            text-align: center;
+        }
+
+        .language-name {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 8px;
+        }
+
+        .language-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            position: relative;
+            background: var(--card);
+        }
+
+        .language-circle::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent) var(--progress), var(--border) 0);
+            z-index: -1;
+        }
+
+        /* Main Content */
+        .main {
+            padding: 60px;
+            overflow-y: auto;
+        }
+
+        /* Journey Section */
+        .journey-section {
+            margin-bottom: 80px;
+        }
+
+        .main-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .intro {
+            font-size: 18px;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            max-width: 800px;
+            line-height: 1.8;
+        }
+
+        .journey-visual {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .journey-line {
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .journey-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 40px;
+        }
+
+        .journey-dot {
+            position: absolute;
+            left: 16px;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            background: var(--card);
+            border: 3px solid var(--accent);
+            border-radius: 50%;
+        }
+
+        .journey-content {
+            background: var(--card);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .journey-content:hover {
+            border-color: var(--accent);
+            transform: translateX(8px);
+        }
+
+        .journey-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .journey-company {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .journey-period {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            color: var(--text-dim);
+        }
+
+        .journey-role {
+            color: var(--accent);
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .journey-points {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .journey-points li {
+            font-size: 14px;
+            color: var(--text-dim);
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .journey-points li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent-alt);
+        }
+
+        /* Projects Grid */
+        .projects-section {
+            margin-bottom: 80px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .project-image {
+            height: 180px;
+            background: var(--bg-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .project-image img {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .project-status {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .project-content {
+            padding: 24px;
+        }
+
+        .project-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .project-desc {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .project-tech {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            background: var(--bg-light);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        /* Philosophy */
+        .philosophy-section {
+            background: var(--card);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 60px;
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .philosophy-item {
+            text-align: center;
+        }
+
+        .philosophy-icon {
+            font-size: 40px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .philosophy-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .philosophy-desc {
+            font-size: 14px;
+            color: var(--text-dim);
+        }
+
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, var(--card) 0%, var(--bg-light) 100%);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .cta-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-text {
+            font-size: 16px;
+            color: var(--text-dim);
+            margin-bottom: 32px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4752c4;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .main {
+                padding: 40px 20px;
+            }
+
+            .philosophy-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .journey-content {
+                padding: 20px;
+            }
+
+            .main-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile">
+                <div class="profile-photo">
+                    <img src="photo.jpg" alt="Michal Hornicky">
+                </div>
+                <h1>Michal Hornicky</h1>
+                <div class="title">Software Engineer & Systems Architect</div>
+            </div>
+
+            <div class="contact-list">
+                <a href="mailto:semtexzv@gmail.com" class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>semtexzv@gmail.com</span>
+                </a>
+                <a href="https://github.com/semtexzv" target="_blank" class="contact-item">
+                    <i class="fab fa-github"></i>
+                    <span>github.com/semtexzv</span>
+                </a>
+                <a href="tel:+41798102894" class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+41 79 810 28 94</span>
+                </a>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Zurich, Switzerland</span>
+                </div>
+            </div>
+
+            <div class="skills-section">
+                <h3 class="section-title">Core Expertise</h3>
+                <div class="skill-bars">
+                    <div class="skill">
+                        <div class="skill-header">
+                            <span class="skill-name">rust</span>
+                            <span class="skill-level">expert</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <div class="skill-header">
+                            <span class="skill-name">distributed_systems</span>
+                            <span class="skill-level">expert</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <div class="skill-header">
+                            <span class="skill-name">ai_systems</span>
+                            <span class="skill-level">advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <div class="skill-header">
+                            <span class="skill-name">go</span>
+                            <span class="skill-level">expert</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <div class="skill-header">
+                            <span class="skill-name">cloud_infra</span>
+                            <span class="skill-level">advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-section">
+                <h3 class="section-title">Languages</h3>
+                <div class="languages">
+                    <div class="language">
+                        <div class="language-circle" style="--progress: 100%">SK</div>
+                        <div class="language-name">Slovak</div>
+                    </div>
+                    <div class="language">
+                        <div class="language-circle" style="--progress: 100%">CZ</div>
+                        <div class="language-name">Czech</div>
+                    </div>
+                    <div class="language">
+                        <div class="language-circle" style="--progress: 80%">EN</div>
+                        <div class="language-name">English</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Journey -->
+            <section class="journey-section">
+                <h2 class="main-title">Engineering Journey</h2>
+                <p class="intro">
+                    From crypto mining to AI agents, I've always been drawn to complex technical challenges. 
+                    I thrive when solving deep problems that require understanding the full system context - 
+                    whether that's scaling distributed systems or building autonomous AI agents.
+                </p>
+
+                <div class="journey-visual">
+                    <div class="journey-line"></div>
+                    
+                    <div class="journey-item">
+                        <div class="journey-dot"></div>
+                        <div class="journey-content">
+                            <div class="journey-header">
+                                <h3 class="journey-company">Google DeepMind</h3>
+                                <span class="journey-period">2024 → present</span>
+                            </div>
+                            <div class="journey-role">Software Engineer - AI Infrastructure</div>
+                            <ul class="journey-points">
+                                <li>Building autonomous AI agents for code generation</li>
+                                <li>Leading Gemini testing infrastructure efforts</li>
+                                <li>Researching and implementing cutting-edge AI architectures</li>
+                                <li>Knowledge sharing through technical workshops</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="journey-item">
+                        <div class="journey-dot"></div>
+                        <div class="journey-content">
+                            <div class="journey-header">
+                                <h3 class="journey-company">Google</h3>
+                                <span class="journey-period">2021 → 2024</span>
+                            </div>
+                            <div class="journey-role">Software Engineer - Mobile Infrastructure</div>
+                            <ul class="journey-points">
+                                <li>Built testing infrastructure for Assistant, Search, and Gemini</li>
+                                <li>Pioneered LLM integration for automated testing</li>
+                                <li>Improved release velocity while maintaining quality</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="journey-item">
+                        <div class="journey-dot"></div>
+                        <div class="journey-content">
+                            <div class="journey-header">
+                                <h3 class="journey-company">RedHat</h3>
+                                <span class="journey-period">2019 → 2021</span>
+                            </div>
+                            <div class="journey-role">Senior Software Engineer - Cloud Platform</div>
+                            <ul class="journey-points">
+                                <li>Led Patch application serving 1000+ enterprise deployments</li>
+                                <li>Architected distributed systems for massive scale</li>
+                                <li>Mentored engineers and drove technical decisions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Philosophy -->
+            <section class="philosophy-section">
+                <h2 class="main-title">Engineering Philosophy</h2>
+                <div class="philosophy-grid">
+                    <div class="philosophy-item">
+                        <i class="fas fa-puzzle-piece philosophy-icon"></i>
+                        <h3 class="philosophy-title">Context First</h3>
+                        <p class="philosophy-desc">Understanding the full problem space before writing code</p>
+                    </div>
+                    <div class="philosophy-item">
+                        <i class="fas fa-microscope philosophy-icon"></i>
+                        <h3 class="philosophy-title">Deep Technical Excellence</h3>
+                        <p class="philosophy-desc">Building systems that are correct, fast, and maintainable</p>
+                    </div>
+                    <div class="philosophy-item">
+                        <i class="fas fa-users philosophy-icon"></i>
+                        <h3 class="philosophy-title">Knowledge Multiplier</h3>
+                        <p class="philosophy-desc">Sharing expertise to elevate the entire team</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects -->
+            <section class="projects-section">
+                <h2 class="main-title">Selected Projects</h2>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="https://raw.githubusercontent.com/semtexzv/termineer/master/screenshot.png" alt="Termineer">
+                            <span class="project-status">Public</span>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">Termineer</h3>
+                            <p class="project-desc">
+                                Production AI coding assistant with autonomous agents. Multi-provider support with unified tool abstraction.
+                            </p>
+                            <div class="project-tech">
+                                <span class="tech-tag">rust</span>
+                                <span class="tech-tag">multi-agent</span>
+                                <span class="tech-tag">mcp</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="https://raw.githubusercontent.com/semtexzv/genagent/main/appearance.png" alt="GenAgent">
+                            <span class="project-status">Research</span>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">GenAgent</h3>
+                            <p class="project-desc">
+                                Cross-platform AI assistant with voice I/O. Exploring multi-modal AI interactions.
+                            </p>
+                            <div class="project-tech">
+                                <span class="tech-tag">rust</span>
+                                <span class="tech-tag">swift</span>
+                                <span class="tech-tag">ffi</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-image">
+                            <span class="project-status">Performance</span>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">High-Performance Systems</h3>
+                            <p class="project-desc">
+                                Suite of performance-critical infrastructure: Protokit, Stor, Prospector. Focus on correctness and speed.
+                            </p>
+                            <div class="project-tech">
+                                <span class="tech-tag">rust</span>
+                                <span class="tech-tag">cuda</span>
+                                <span class="tech-tag">systems</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA -->
+            <section class="cta-section">
+                <h2 class="cta-title">Let's Build Something Great</h2>
+                <p class="cta-text">
+                    I'm interested in challenging technical problems that require deep understanding and elegant solutions.
+                </p>
+                <div class="cta-buttons">
+                    <a href="mailto:semtexzv@gmail.com" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i>
+                        <span>Get in Touch</span>
+                    </a>
+                    <a href="https://github.com/semtexzv" target="_blank" class="btn btn-secondary">
+                        <i class="fab fa-github"></i>
+                        <span>View My Work</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Animate skill bars on load
+        window.addEventListener('load', () => {
+            const skillFills = document.querySelectorAll('.skill-fill');
+            skillFills.forEach((fill, index) => {
+                setTimeout(() => {
+                    fill.style.width = fill.style.width;
+                }, index * 100);
+            });
+        });
+
+        // Smooth scroll for journey items
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.journey-item').forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            item.style.transition = 'all 0.6s ease';
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

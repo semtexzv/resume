@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michal Hornicky - AI Engineer Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --slide-bg: #1a1a2e;
+            --accent-1: #16213e;
+            --accent-2: #0f3460;
+            --highlight: #e94560;
+            --text-primary: #ffffff;
+            --text-secondary: #a8a8b3;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--slide-bg);
+            color: var(--text-primary);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Presentation Container */
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Slides */
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: var(--highlight);
+            transform: scale(1.1);
+            border-color: var(--highlight);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--highlight);
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+
+        /* Slide Indicators */
+        .slide-indicators {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: var(--highlight);
+            transform: scale(1.5);
+        }
+
+        /* Slide 1 - Title */
+        .title-slide {
+            background: var(--gradient-1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 60px;
+        }
+
+        .title-slide h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInDown 1s ease;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.5s forwards;
+        }
+
+        .title-slide .photo-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            opacity: 0;
+            animation: zoomIn 1s ease 0.8s forwards;
+        }
+
+        .title-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .title-slide .contact-pills {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: slideInUp 1s ease 1s forwards;
+        }
+
+        .contact-pill {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-pill:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        /* Slide 2 - About Me */
+        .about-slide {
+            background: var(--gradient-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 60px;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .about-text h2 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            animation: slideInLeft 1s ease;
+        }
+
+        .about-text p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.5s forwards;
+        }
+
+        .fun-facts {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            opacity: 0;
+            animation: slideInRight 1s ease 0.8s forwards;
+        }
+
+        .fun-facts h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .fact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .fact-item i {
+            font-size: 1.5rem;
+            color: #ffd700;
+        }
+
+        /* Slide 3 - Skills Matrix */
+        .skills-slide {
+            background: var(--gradient-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 60px;
+        }
+
+        .skills-container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .skills-container h2 {
+            text-align: center;
+            font-size: 3.5rem;
+            margin-bottom: 50px;
+            animation: slideInDown 1s ease;
+        }
+
+        .skills-matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .skill-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transform: rotateY(180deg);
+            opacity: 0;
+            animation: flipIn 0.8s ease forwards;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:nth-child(1) { animation-delay: 0.1s; }
+        .skill-card:nth-child(2) { animation-delay: 0.2s; }
+        .skill-card:nth-child(3) { animation-delay: 0.3s; }
+        .skill-card:nth-child(4) { animation-delay: 0.4s; }
+        .skill-card:nth-child(5) { animation-delay: 0.5s; }
+        .skill-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .skill-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .skill-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .skill-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .skill-level {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .star {
+            color: #ffd700;
+            font-size: 1.2rem;
+        }
+
+        /* Slide 4 - Timeline */
+        .timeline-slide {
+            background: var(--gradient-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 60px;
+            overflow-y: auto;
+        }
+
+        .timeline-container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .timeline-container h2 {
+            text-align: center;
+            font-size: 3.5rem;
+            margin-bottom: 50px;
+            animation: slideInDown 1s ease;
+        }
+
+        .timeline-path {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInScale 0.8s ease forwards;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.8s; }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 0 20px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .timeline-dot {
+            width: 30px;
+            height: 30px;
+            background: #ffd700;
+            border-radius: 50%;
+            flex-shrink: 0;
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Slide 5 - Projects Showcase */
+        .projects-slide {
+            background: var(--slide-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 60px;
+            overflow-y: auto;
+        }
+
+        .projects-container {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .projects-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .projects-header h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideInDown 1s ease;
+        }
+
+        .project-carousel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-showcase {
+            background: var(--accent-1);
+            border-radius: 20px;
+            overflow: hidden;
+            transform: perspective(1000px) rotateY(-20deg);
+            opacity: 0;
+            animation: projectReveal 1s ease forwards;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-showcase:nth-child(1) { animation-delay: 0.1s; }
+        .project-showcase:nth-child(2) { animation-delay: 0.2s; }
+        .project-showcase:nth-child(3) { animation-delay: 0.3s; }
+        .project-showcase:nth-child(4) { animation-delay: 0.4s; }
+
+        .project-showcase:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.05);
+            box-shadow: 0 20px 40px rgba(233, 69, 96, 0.3);
+        }
+
+        .project-img {
+            height: 200px;
+            background: var(--accent-2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .project-showcase:hover .project-img img {
+            transform: scale(1.1);
+        }
+
+        .project-info {
+            padding: 25px;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--highlight);
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: var(--accent-2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #4facfe;
+        }
+
+        /* Slide 6 - Contact */
+        .contact-slide {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 60px;
+        }
+
+        .contact-content {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .contact-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            animation: slideInDown 1s ease;
+        }
+
+        .contact-cta {
+            font-size: 1.5rem;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.5s forwards;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: bounceIn 0.8s ease forwards;
+            cursor: pointer;
+        }
+
+        .contact-card:nth-child(1) { animation-delay: 0.2s; }
+        .contact-card:nth-child(2) { animation-delay: 0.4s; }
+        .contact-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            background: rgba(233, 69, 96, 0.2);
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+        }
+
+        .contact-card i {
+            font-size: 3rem;
+            color: var(--highlight);
+            margin-bottom: 15px;
+        }
+
+        .contact-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .contact-card p {
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes flipIn {
+            from {
+                opacity: 0;
+                transform: rotateY(180deg);
+            }
+            to {
+                opacity: 1;
+                transform: rotateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes projectReveal {
+            to {
+                opacity: 1;
+                transform: perspective(1000px) rotateY(0deg);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Keyboard hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title-slide h1 { font-size: 3rem; }
+            .title-slide .subtitle { font-size: 1.5rem; }
+            .about-content { grid-template-columns: 1fr; }
+            .skills-matrix { grid-template-columns: 1fr; }
+            .timeline-item { flex-direction: column !important; }
+            .project-carousel { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Progress Bar -->
+        <div class="progress-bar" id="progress"></div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active" id="slide-1">
+            <div class="title-slide">
+                <div class="photo-container">
+                    <img src="photo.jpg" alt="Michal Hornicky">
+                </div>
+                <h1>Michal Hornicky</h1>
+                <p class="subtitle">AI Engineer & Distributed Systems Architect 🚀</p>
+                <div class="contact-pills">
+                    <div class="contact-pill">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Zurich, Switzerland
+                    </div>
+                    <div class="contact-pill">
+                        <i class="fas fa-briefcase"></i>
+                        Google DeepMind
+                    </div>
+                    <div class="contact-pill">
+                        <i class="fas fa-code"></i>
+                        Rust & Go Enthusiast
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: About Me -->
+        <div class="slide" id="slide-2">
+            <div class="about-slide">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>Who Am I? 🤔</h2>
+                        <p>Hi! I'm Michal, a software engineer who went from mining cryptocurrencies to mining insights from AI models. Currently building autonomous agents at Google DeepMind that are probably smarter than me (but don't tell them that).</p>
+                        <p>My journey: Android dev → Distributed systems → AI/ML → Teaching machines to code better than humans (almost there!).</p>
+                    </div>
+                    <div class="fun-facts">
+                        <h3>Fun Facts About Me 🎉</h3>
+                        <div class="fact-item">
+                            <i class="fas fa-robot"></i>
+                            <span>Built AI agents that can code autonomously</span>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-mountain"></i>
+                            <span>Living in Switzerland (yes, there's chocolate)</span>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-code-branch"></i>
+                            <span>Rust evangelist (zero-cost abstractions FTW)</span>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-rocket"></i>
+                            <span>From crypto mining to AI - always riding the wave</span>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-language"></i>
+                            <span>Speaks 3 languages + Rust, Go, Python...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Skills -->
+        <div class="slide" id="slide-3">
+            <div class="skills-slide">
+                <div class="skills-container">
+                    <h2>My Superpowers 💪</h2>
+                    <div class="skills-matrix">
+                        <div class="skill-card">
+                            <div class="skill-icon">🤖</div>
+                            <h3>AI & LLMs</h3>
+                            <div class="skill-level">
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                            <p>Multi-agent systems, autonomous coding agents</p>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">🦀</div>
+                            <h3>Rust</h3>
+                            <div class="skill-level">
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                            <p>Performance-critical systems, zero overhead</p>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">🐹</div>
+                            <h3>Go</h3>
+                            <div class="skill-level">
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                            <p>Distributed systems, cloud-native apps</p>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">☁️</div>
+                            <h3>Cloud & K8s</h3>
+                            <div class="skill-level">
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="far fa-star star"></i>
+                            </div>
+                            <p>Kubernetes, microservices, scaling to infinity</p>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">⚡</div>
+                            <h3>Performance</h3>
+                            <div class="skill-level">
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                            <p>GPGPU, optimization, making things go brrr</p>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">📱</div>
+                            <h3>Mobile</h3>
+                            <div class="skill-level">
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="far fa-star star"></i>
+                            </div>
+                            <p>Android, iOS, cross-platform magic</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Experience Timeline -->
+        <div class="slide" id="slide-4">
+            <div class="timeline-slide">
+                <div class="timeline-container">
+                    <h2>My Journey So Far 🛤️</h2>
+                    <div class="timeline-path">
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <h3>Google DeepMind 🧠</h3>
+                                <p class="period">2024 - Present</p>
+                                <p>Teaching AI to write better code than me (it's working!)</p>
+                            </div>
+                            <div class="timeline-dot"></div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <h3>Google 🔍</h3>
+                                <p class="period">2021 - 2024</p>
+                                <p>Made Gemini/Bard apps work smoothly, automated ALL the tests</p>
+                            </div>
+                            <div class="timeline-dot"></div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <h3>RedHat 🎩</h3>
+                                <p class="period">2019 - 2021</p>
+                                <p>Scaled systems to handle thousands of deployments daily</p>
+                            </div>
+                            <div class="timeline-dot"></div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <h3>Android Developer 📱</h3>
+                                <p class="period">2016 - 2019</p>
+                                <p>Built 10+ apps, migrated everything to Kotlin (you're welcome)</p>
+                            </div>
+                            <div class="timeline-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Projects -->
+        <div class="slide" id="slide-5">
+            <div class="projects-slide">
+                <div class="projects-container">
+                    <div class="projects-header">
+                        <h2>Cool Stuff I've Built 🛠️</h2>
+                        <p>Click to explore my favorite projects!</p>
+                    </div>
+                    <div class="project-carousel">
+                    <div class="project-showcase">
+                        <div class="project-img">
+                            <img src="https://raw.githubusercontent.com/semtexzv/termineer/master/screenshot.png" alt="Termineer">
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">Termineer 🤖</h3>
+                            <p>AI coding agent that actually ships code</p>
+                            <div class="project-tags">
+                                <span class="tag">Rust</span>
+                                <span class="tag">Multi-Agent</span>
+                                <span class="tag">Public</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-showcase">
+                        <div class="project-img">
+                            <img src="https://raw.githubusercontent.com/semtexzv/genagent/main/appearance.png" alt="GenAgent">
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">GenAgent 🎯</h3>
+                            <p>macOS AI assistant in your taskbar</p>
+                            <div class="project-tags">
+                                <span class="tag">Rust</span>
+                                <span class="tag">Swift</span>
+                                <span class="tag">Experimental</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-showcase">
+                        <div class="project-img">
+                            <img src="https://via.placeholder.com/400x200/e94560/ffffff?text=Rama+LLM" alt="Rama">
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">Rama 🧠</h3>
+                            <p>LLM from scratch (because why not?)</p>
+                            <div class="project-tags">
+                                <span class="tag">Rust</span>
+                                <span class="tag">ML</span>
+                                <span class="tag">Research</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-showcase">
+                        <div class="project-img">
+                            <img src="https://via.placeholder.com/400x200/4facfe/ffffff?text=Prospector" alt="Prospector">
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">Prospector ⛏️</h3>
+                            <p>World's fastest crypto miner (back in the day)</p>
+                            <div class="project-tags">
+                                <span class="tag">Rust</span>
+                                <span class="tag">CUDA</span>
+                                <span class="tag">Performance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Contact -->
+        <div class="slide" id="slide-6">
+            <div class="contact-slide">
+                <div class="contact-content">
+                    <h2>Let's Build Something Amazing! 🚀</h2>
+                    <p class="contact-cta">I'm always excited about AI, Rust, and building the future</p>
+                    <div class="contact-grid">
+                        <div class="contact-card" onclick="window.open('https://github.com/semtexzv', '_blank')">
+                            <i class="fab fa-github"></i>
+                            <h3>GitHub</h3>
+                            <p>@semtexzv</p>
+                        </div>
+                        <div class="contact-card" onclick="window.location.href='mailto:semtexzv@gmail.com'">
+                            <i class="fas fa-envelope"></i>
+                            <h3>Email</h3>
+                            <p>semtexzv@gmail.com</p>
+                        </div>
+                        <div class="contact-card" onclick="window.location.href='tel:+41798102894'">
+                            <i class="fas fa-phone"></i>
+                            <h3>Phone</h3>
+                            <p>+41 79 810 28 94</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-controls">
+            <button class="nav-btn" id="prev-btn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn" id="next-btn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Slide Indicators -->
+        <div class="slide-indicators" id="indicators"></div>
+
+        <!-- Keyboard Hint -->
+        <div class="keyboard-hint">Use arrow keys or click buttons to navigate</div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progress = document.getElementById('progress');
+        const indicatorsContainer = document.getElementById('indicators');
+        
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        // Create indicators
+        for (let i = 0; i < totalSlides; i++) {
+            const indicator = document.createElement('div');
+            indicator.classList.add('indicator');
+            if (i === 0) indicator.classList.add('active');
+            indicator.addEventListener('click', () => goToSlide(i));
+            indicatorsContainer.appendChild(indicator);
+        }
+
+        const indicators = document.querySelectorAll('.indicator');
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlide);
+            });
+
+            progress.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+        }
+
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            updateSlide();
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlide();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlide();
+        }
+
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'Home') goToSlide(0);
+            if (e.key === 'End') goToSlide(totalSlides - 1);
+        });
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) prevSlide();
+        }
+
+        // Auto-advance (optional)
+        // setInterval(nextSlide, 10000);
+    </script>
+</body>
+</html>

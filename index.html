@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michal Hornicky - AI Engineer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #10b981;
+            --accent-color: #f59e0b;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+            animation: pulse 20s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp 0.8s ease 0.4s both;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-photo:hover {
+            transform: scale(1.05);
+        }
+
+        .hero-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item:hover {
+            color: var(--primary-color);
+        }
+
+        .contact-item i {
+            font-size: 1.2rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 4rem 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-content {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-content::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 8rem;
+            color: var(--primary-color);
+            opacity: 0.1;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .skill-category h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: var(--bg-tertiary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Experience Section */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 3rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideInLeft 0.6s ease forwards;
+        }
+
+        .timeline-item:nth-child(2) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px var(--bg-secondary);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .job-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .job-company {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .job-description {
+            list-style: none;
+        }
+
+        .job-description li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .job-description li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .project-image {
+            height: 200px;
+            background: var(--bg-tertiary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.1);
+        }
+
+        .project-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .project-badge.public {
+            background: var(--secondary-color);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: color 0.3s ease;
+        }
+
+        .project-links a:hover {
+            color: #1d4ed8;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .tech-tag:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Education Section */
+        .education-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .education-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .education-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .degree {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .university {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .edu-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-photo {
+                margin: 0 auto;
+            }
+
+            .contact-info {
+                justify-content: center;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .timeline {
+                padding-left: 1rem;
+            }
+
+            .timeline-item::before {
+                left: -1.5rem;
+            }
+
+            .job-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-primary: #f9fafb;
+                --text-secondary: #d1d5db;
+                --bg-primary: #1f2937;
+                --bg-secondary: #111827;
+                --bg-tertiary: #374151;
+                --border-color: #4b5563;
+            }
+
+            .hero::before {
+                background: radial-gradient(circle, rgba(37, 99, 235, 0.2) 0%, transparent 70%);
+            }
+
+            nav {
+                background: rgba(31, 41, 55, 0.95);
+            }
+
+            .about-content::before {
+                color: var(--primary-color);
+                opacity: 0.2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h3>Michal Hornicky</h3>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Michal Hornicky</h1>
+                <p class="subtitle">Software Engineer | AI Engineer | Distributed Systems Engineer</p>
+                <div class="contact-info">
+                    <a href="mailto:semtexzv@gmail.com" class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        semtexzv@gmail.com
+                    </a>
+                    <a href="tel:+41798102894" class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        +41 79 810 28 94
+                    </a>
+                    <a href="https://github.com/semtexzv" class="contact-item" target="_blank">
+                        <i class="fab fa-github"></i>
+                        github.com/semtexzv
+                    </a>
+                    <span class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Zurich, Switzerland
+                    </span>
+                </div>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">
+                        <i class="fas fa-code"></i>
+                        View Projects
+                    </a>
+                    <a href="resume.md" download class="btn btn-secondary">
+                        <i class="fas fa-download"></i>
+                        Download Resume
+                    </a>
+                </div>
+            </div>
+            <div class="hero-photo">
+                <img src="./photo.jpg" alt="Michal Hornicky">
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <p>Highly skilled and experienced software engineer with a proven track record of success in developing and deploying high-performance, scalable applications. Expertise in a wide range of technologies, including machine learning, distributed systems, and cloud computing. Passionate about solving complex problems and delivering value.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <div class="container">
+            <h2>Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3><i class="fas fa-brain"></i> AI & Machine Learning</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Multi-agent Systems</span>
+                        <span class="skill-tag">LLMs</span>
+                        <span class="skill-tag">Autonomous Agents</span>
+                        <span class="skill-tag">Model Integration</span>
+                        <span class="skill-tag">Prompt Engineering</span>
+                        <span class="skill-tag">ML Infrastructure</span>
+                        <span class="skill-tag">Autodiff Frameworks</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3><i class="fas fa-code"></i> Programming Languages</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Rust (Expert)</span>
+                        <span class="skill-tag">Go (Expert)</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Kotlin</span>
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">JavaScript/React</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3><i class="fas fa-server"></i> Systems & Infrastructure</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Distributed Systems</span>
+                        <span class="skill-tag">Cloud Computing</span>
+                        <span class="skill-tag">Kubernetes</span>
+                        <span class="skill-tag">Microservices</span>
+                        <span class="skill-tag">Event-driven Architecture</span>
+                        <span class="skill-tag">GPGPU Programming</span>
+                        <span class="skill-tag">Performance Optimization</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <div class="container">
+            <h2>Work Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="job-header">
+                        <h3 class="job-title">Software Engineer</h3>
+                        <span class="job-date">November 2024 - Current</span>
+                    </div>
+                    <p class="job-company">Google DeepMind, Zurich</p>
+                    <ul class="job-description">
+                        <li>Led infrastructure efforts for Gemini application testing, designing QA processes and supporting technologies</li>
+                        <li>Led integration of AI Agents into testing workflows, improving automation and efficiency</li>
+                        <li>Implemented features directly in the Gemini application, contributing to core product development</li>
+                        <li>Conducted extensive research on various AI agent architectures and capabilities</li>
+                        <li>Organized knowledge-sharing workshops and mentored team members on AI agent architectures and best practices</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <div class="job-header">
+                        <h3 class="job-title">Software Engineer</h3>
+                        <span class="job-date">November 2021 - November 2024</span>
+                    </div>
+                    <p class="job-company">Google, Zurich</p>
+                    <ul class="job-description">
+                        <li>Developed tooling, internal processes, automated testing architecture for Android and iOS Applications</li>
+                        <li>Supported testing & releases for Google Assistant, Google Search Application, and Gemini/Bard mobile applications</li>
+                        <li>Led efforts for using LLMs for automated testing & software verification</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <div class="job-header">
+                        <h3 class="job-title">Senior Software Engineer</h3>
+                        <span class="job-date">July 2020 - September 2021</span>
+                    </div>
+                    <p class="job-company">RedHat, Brno</p>
+                    <ul class="job-description">
+                        <li>Led the server development team for the Patch application on cloud.redhat.com</li>
+                        <li>Scaled the patch application to serve thousands of large-scale deployments per day</li>
+                        <li>Moved update management for fleets of RHEL deployments to the Cloud</li>
+                        <li>Supported other teams with developing and deploying their applications on the same platform</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <div class="job-header">
+                        <h3 class="job-title">Software Engineer</h3>
+                        <span class="job-date">September 2019 - July 2020</span>
+                    </div>
+                    <p class="job-company">RedHat, Brno</p>
+                    <ul class="job-description">
+                        <li>Ensured performance of the Vulnerability application on cloud.redhat.com</li>
+                        <li>Initiated the development of the Patch application on the same platform</li>
+                        <li>Developed libraries and tools for integrating Go language into a pre-existing Python-based ecosystem</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <div class="job-header">
+                        <h3 class="job-title">Android Developer</h3>
+                        <span class="job-date">March 2016 - September 2019</span>
+                    </div>
+                    <p class="job-company">TouchArt s.r.o, Brno</p>
+                    <ul class="job-description">
+                        <li>Managed all aspects of several Android applications, from initial research to deployment</li>
+                        <li>Led architectural overhauls, migration to Kotlin, usage of MVVM and reactive dataflow paradigms</li>
+                        <li>Directly contributed to more than 10 mobile applications developed for other companies</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container">
+            <h2>Notable Projects</h2>
+            <div class="projects-grid">
+                <!-- Termineer -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://raw.githubusercontent.com/semtexzv/termineer/master/screenshot.png" alt="Termineer Screenshot">
+                        <span class="project-badge public">Public</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Termineer - Autonomous AI Coding Agent</h3>
+                        <div class="project-links">
+                            <a href="https://termineer.io/" target="_blank">
+                                <i class="fas fa-globe"></i> Website
+                            </a>
+                            <a href="https://github.com/semtexzv/termineer" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                        <p class="project-description">
+                            Self-directed coding agent with multi-agent orchestration framework. Features autonomous task decomposition, universal tool abstraction across AI providers, and Model Context Protocol support.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Rust</span>
+                            <span class="tech-tag">Multi-Agent</span>
+                            <span class="tech-tag">MCP</span>
+                            <span class="tech-tag">TUI</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GenAgent -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://raw.githubusercontent.com/semtexzv/genagent/main/appearance.png" alt="GenAgent Screenshot">
+                        <span class="project-badge">Experimental</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">GenAgent - AI-Powered Multi-Agent Assistant</h3>
+                        <div class="project-links">
+                            <a href="https://github.com/semtexzv/genagent" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                        <p class="project-description">
+                            Experimental macOS/iOS taskbar AI assistant supporting concurrent task execution. Integrates multiple AI providers and features voice capabilities with Deepgram and OpenAI.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Rust</span>
+                            <span class="tech-tag">Swift</span>
+                            <span class="tech-tag">FFI</span>
+                            <span class="tech-tag">Multi-Provider</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rama -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x200/2563eb/ffffff?text=Rama+LLM" alt="Rama Project">
+                        <span class="project-badge">Experimental</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Rama - LLM Implementation from Scratch</h3>
+                        <div class="project-links">
+                            <a href="https://github.com/semtexzv/rama" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                        <p class="project-description">
+                            Experimental Rust implementation of Llama models for local inference. Pure implementation focusing on simplicity as a research testbed and learning platform for transformer architectures.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Rust</span>
+                            <span class="tech-tag">LLM</span>
+                            <span class="tech-tag">Transformers</span>
+                            <span class="tech-tag">Research</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MML -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x200/10b981/ffffff?text=MML" alt="MML Project">
+                        <span class="project-badge">Experimental</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">MML - Micro Machine Learning Library</h3>
+                        <div class="project-links">
+                            <a href="https://github.com/semtexzv/mml" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                        <p class="project-description">
+                            Experimental ML library with autodiff and graph tensor framework optimized for Apple Silicon. Features automatic differentiation engine and computational graph based operations.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Rust</span>
+                            <span class="tech-tag">Autodiff</span>
+                            <span class="tech-tag">Apple Silicon</span>
+                            <span class="tech-tag">ML Framework</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blok3 -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x200/f59e0b/ffffff?text=Blok3" alt="Blok3 Project">
+                        <span class="project-badge public">Public</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Blok3 - Low-Latency Crypto Portfolio</h3>
+                        <div class="project-links">
+                            <a href="https://blok3.io/" target="_blank">
+                                <i class="fas fa-globe"></i> Website
+                            </a>
+                        </div>
+                        <p class="project-description">
+                            High-performance cryptocurrency portfolio tracking platform. Built using self-developed Stor & Protokit libraries, optimized for low-latency operation without caching.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Rust</span>
+                            <span class="tech-tag">Low-Latency</span>
+                            <span class="tech-tag">Cryptocurrency</span>
+                            <span class="tech-tag">Storage</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Protokit -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x200/8b5cf6/ffffff?text=Protokit" alt="Protokit Project">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Protokit - High-Performance Protocol Buffers</h3>
+                        <div class="project-links">
+                            <a href="https://github.com/semtexzv/protokit" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                        <p class="project-description">
+                            Only Rust implementation supporting full TextFormat specification. Competitive performance with industry-standard libraries while providing comprehensive feature set.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Rust</span>
+                            <span class="tech-tag">Protocol Buffers</span>
+                            <span class="tech-tag">Serialization</span>
+                            <span class="tech-tag">Performance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stor -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x200/6366f1/ffffff?text=Stor" alt="Stor Project">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Stor - Embedded Key-Value Database</h3>
+                        <div class="project-links">
+                            <a href="https://github.com/semtexzv/stor" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                        <p class="project-description">
+                            High-performance, low-latency storage engine. Typed key-value database for Rust built on RocksDB with zero-copy deserialization for optimal performance.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Rust</span>
+                            <span class="tech-tag">RocksDB</span>
+                            <span class="tech-tag">Storage</span>
+                            <span class="tech-tag">Database</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prospector -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x200/ec4899/ffffff?text=Prospector" alt="Prospector Project">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Prospector - Multi-Algorithm Crypto Miner</h3>
+                        <div class="project-links">
+                            <a href="https://github.com/semtexzv/Prospector" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                        <p class="project-description">
+                            Green-field cryptocurrency mining implementation achieving world's best performance on Signatum. Supports ~6 algorithms with GPU acceleration via OpenCL and CUDA.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Rust</span>
+                            <span class="tech-tag">CUDA</span>
+                            <span class="tech-tag">OpenCL</span>
+                            <span class="tech-tag">Performance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LNPay -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x200/f97316/ffffff?text=LNPay" alt="LNPay Project">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">LNPay - Lightning Network Payment Platform</h3>
+                        <div class="project-links">
+                            <a href="https://github.com/semtexzv/LNPay" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                        <p class="project-description">
+                            Payment platform for Bitcoin Lightning Network purchases via credit cards. Features Stripe integration, direct Lightning Network communication, and on-exchange hedging.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Go</span>
+                            <span class="tech-tag">Lightning Network</span>
+                            <span class="tech-tag">Kubernetes</span>
+                            <span class="tech-tag">Azure</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="section">
+        <div class="container">
+            <h2>Education</h2>
+            <div class="education-grid">
+                <div class="education-card">
+                    <h3 class="degree">Master's Degree</h3>
+                    <p class="university">Brno University of Technology</p>
+                    <p class="field">Information Technology</p>
+                    <p class="edu-date">2017 - 2019</p>
+                </div>
+                <div class="education-card">
+                    <h3 class="degree">Bachelor's Degree</h3>
+                    <p class="university">Brno University of Technology</p>
+                    <p class="field">Information Technology</p>
+                    <p class="edu-date">2014 - 2017</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://github.com/semtexzv" target="_blank">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="mailto:semtexzv@gmail.com">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a href="tel:+41798102894">
+                    <i class="fas fa-phone"></i>
+                </a>
+            </div>
+            <p>&copy; 2025 Michal Hornicky. All rights reserved.</p>
+            <p>Building autonomous AI systems and exploring the intersection of AI and software engineering.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for section animations
+        const sections = document.querySelectorAll('.section');
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const sectionObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Project card click handler
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't follow the link if clicking on actual links
+                if (e.target.tagName === 'A' || e.target.closest('a')) {
+                    return;
+                }
+                
+                // Find the first link in the card and follow it
+                const firstLink = this.querySelector('.project-links a');
+                if (firstLink) {
+                    window.open(firstLink.href, '_blank');
+                }
+            });
+        });
+
+        // Add hover effect for skill tags
+        document.querySelectorAll('.skill-tag, .tech-tag').forEach(tag => {
+            tag.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            tag.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
